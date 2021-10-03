@@ -55,7 +55,7 @@ async def send_welcome(msg: types.Message):
 
 @dp.callback_query_handler(text_contains="select")
 async def selecting(call: CallbackQuery):
-   # try:
+   try:
       callback_data = call.data
       dt = text=open(callback_data[7:]+"/text.txt", 'r').read()
       cbd = "cancel:"+callback_data[7:]
@@ -68,10 +68,9 @@ async def selecting(call: CallbackQuery):
       else:
          name = call["from"].first_name
       await bot.send_message(dt[dt.find(":::")+3:], text="\["+str(call["from"].id)+"]\n["+name+"](tg://user?id="+str(call["from"].id)+")"+"\nВзял задание:\n"+dt.replace("&&&","")[6:dt.find(":::")-3], reply_markup=InlineKeyboardMarkup(row_width=2).insert(InlineKeyboardButton(text="Забрать", callback_data="depriv:"+callback_data[7:])), parse_mode='markdown')
-      # 
-      await waitedmsg(10, str(call["from"].id))
-   # except:
-      # return
+      # await waitedmsg(10, str(call["from"].id))
+   except:
+      return
 
 @dp.callback_query_handler(text_contains="cancel")
 async def canceltask(call: CallbackQuery):
@@ -92,7 +91,7 @@ async def canceltask(call: CallbackQuery):
 
 @dp.callback_query_handler(text_contains="finish")
 async def finishtask(call: CallbackQuery):
-   # try:
+   try:
       await call["message"].edit_reply_markup(reply_markup=InlineKeyboardMarkup())
       callback_data = call.data
       cbd = "resend:"+callback_data[7:]
@@ -103,12 +102,12 @@ async def finishtask(call: CallbackQuery):
          name = call["from"].first_name
       await bot.send_message(dt[dt.find(":::")+3:], text="\["+str(call["from"].id)+"]\n["+name+"](tg://user?id="+str(call["from"].id)+")"+"\nВыполнил задание:\n"+dt.replace("&&&","")[6:dt.find(":::")-3], reply_markup=InlineKeyboardMarkup(row_width=2).insert(InlineKeyboardButton(text="Вернуть в оборот", callback_data=cbd)), parse_mode='markdown')
       os.remove(callback_data[7:])
-   # except:
-      # return
+   except:
+      return
 
 @dp.callback_query_handler(text_contains="depriv")
 async def canceltask(call: CallbackQuery):
-   # try:
+   try:
       callback_data = call.data
       txt = open(callback_data[7:]+"/text.txt", 'r').read()
       msgid = open(callback_data[7:]+"/msgid", 'r').read()
@@ -122,12 +121,12 @@ async def canceltask(call: CallbackQuery):
       else:
          name = call["from"].first_name
       await bot.send_message(dt[dt.find(":::")+3:], text="Вы забрали задание у ["+call["message"].text[call["message"].text.find("\n")+1:call["message"].text.find("\n").find("\n")]+"](tg://user?id="+call["message"].text[call["message"].text.find("[")+1:call["message"].text.find("]")]+")\n"+dt.replace("&&&","")[6:dt.find(":::")-3], parse_mode='markdown')
-   # except:
-      # return
+   except:
+      return
 
 @dp.callback_query_handler(text_contains="resend")
 async def canceltask(call: CallbackQuery):
-   # try:
+   try:
       callback_data = call.data
       txt = open(callback_data[7:]+"/text.txt", 'r').read()
       cbd = "select:"+callback_data[7:]
@@ -139,8 +138,8 @@ async def canceltask(call: CallbackQuery):
       else:
          name = call["from"].first_name
       await bot.send_message(dt[dt.find(":::")+3:], text="Вы вернули задание в оборот.\n"+dt.replace("&&&","")[6:dt.find(":::")-3], parse_mode='markdown')
-   # except:
-      # return
+   except:
+      return
 
 def timer(time, id):
    print("timer")
